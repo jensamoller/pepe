@@ -1,0 +1,16 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+Jens:
+   id: 1
+   name: "Jens Møller"
+   given_name: "Jens Aage Kruse Møller"
+   birthday: "1975-10-30"
+   height: 180
+   jersey_number: 11
+   url_id: 1
+   birth_country: "Denmark"
+   birth_city: "Grenaa"
+   
+#
+# two:
+#   column: value

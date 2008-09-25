@@ -1,0 +1,39 @@
+<center>
+	<img src="<%=h @club.crest_url %>" /><br/>
+	<h1><%=h @club.name %></h1><br/>
+	
+	<table border="1">
+	  <tr>
+	    <td>Full name</td><td><%=h @club.full_name %></td>
+	  </tr>
+	  <tr>
+	    <td>Country</td>
+	    <td><%=h @club.country %></td>
+	  </tr>
+	  <tr>
+	    <th>Founded</th>
+	    <td><%=h @club.founded %></td>
+	  </tr>
+	  <tr>
+	    <td>Url</td>
+		<td>
+			<a target="_blank" href="http://en.wikipedia.org<%= @club.url.url %> " ><%=h @club.url.url %></a>
+		</td>
+	  </tr>
+		<% for contract in @club.contracts %>
+	  	<tr>
+    		<td>
+				<img height="100" src="<%=h contract.player.image_url %>" /><br/>
+				<%= link_to contract.player.name, contract.player %>
+			</td>
+    		<td><%= contract.start_year %>-<% contract.end_year %></td>
+	  	</tr>
+		<% end %>
+	  <tr>
+	    <td><%= link_to 'Edit', edit_club_path(@club) %></td>
+	    <td colspan="2">
+			<%= link_to 'Destroy', @club, :confirm => 'Are you sure?', :method => :delete %>
+		</td>
+	  </tr>
+	</table>
+</center>

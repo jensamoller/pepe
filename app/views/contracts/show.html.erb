@@ -1,0 +1,13 @@
+<p>
+  <b>Player:</b>
+  <%=h @contract.player_id %>
+</p>
+
+<p>
+  <b>Club:</b>
+  <%=h @contract.club_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_contract_path(@contract) %> |
+<%= link_to 'Back', contracts_path %>

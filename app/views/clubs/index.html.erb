@@ -1,0 +1,32 @@
+<h1>Listing clubs</h1>
+<%= link_to 'Players', players_path %>
+<%= will_paginate @clubs %>
+<table border="1">
+  <tr>
+    <th>Crest</th>
+    <th>Name</th>
+    <th>Full name</th>
+    <th>Country</th>
+    <th>Founded</th>
+    <th>Contracts</th>
+    <th>Url</th>
+  </tr>
+
+<% for club in @clubs %>
+  <tr>
+    <td><img src="<%=h club.crest_url %>" /></td>
+    <td><%= link_to club.name, club %></td>
+    <td><%=h club.full_name %></td>
+    <td><%=h club.country %></td>
+    <td><%=h club.founded %></td>
+    <td><%=h club.contracts.length %></td>
+	<td><a target="_blank" href="http://en.wikipedia.org<%= club.url.url %> " ><%=h club.url.url %></a></td>
+    <td><%= link_to 'Edit', edit_club_path(club) %></td>
+    <td><%= link_to 'Destroy', club, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+<%= will_paginate @clubs %>
+<br />
+
+<%= link_to 'New club', new_club_path %>

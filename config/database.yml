@@ -1,0 +1,15 @@
+
+development:
+  adapter: mysql
+  database: pepe_development
+  timeout: 5000
+  
+test:
+  adapter: mysql
+  database: pepe_test
+  timeout: 5000
+
+production:
+  adapter: mysql
+  database: pepe_production
+  timeout: 5000

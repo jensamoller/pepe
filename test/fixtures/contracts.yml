@@ -1,0 +1,10 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  player_id: 1
+  club_id: 1
+  start_year: 1981
+  end_year: 1995
+  contract_type: "Player"
+  apperances: 100
+  goals: 75

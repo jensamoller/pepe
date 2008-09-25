@@ -1,0 +1,22 @@
+<h1>Listing contracts</h1>
+
+<table>
+  <tr>
+    <th>Player</th>
+    <th>Club</th>
+  </tr>
+
+<% for contract in @contracts %>
+  <tr>
+    <td><%=h contract.player_id %></td>
+    <td><%=h contract.club_id %></td>
+    <td><%= link_to 'Show', contract %></td>
+    <td><%= link_to 'Edit', edit_contract_path(contract) %></td>
+    <td><%= link_to 'Destroy', contract, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New contract', new_contract_path %>
