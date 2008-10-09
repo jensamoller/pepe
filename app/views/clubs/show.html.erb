@@ -17,7 +17,9 @@
 	  <tr>
 	    <td>Url</td>
 		<td>
-			<a target="_blank" href="http://en.wikipedia.org<%= @club.url.url %> " ><%=h @club.url.url %></a>
+			<% for url in @club.urls %>
+			<a target="_blank" href="http://en.wikipedia.org<%= url.url %> " ><%=h url.url %></a><br/>
+			<% end %>
 		</td>
 	  </tr>
 		<% for contract in @club.contracts %>
@@ -26,7 +28,7 @@
 				<img height="100" src="<%=h contract.player.image_url %>" /><br/>
 				<%= link_to contract.player.name, contract.player %>
 			</td>
-    		<td><%= contract.start_year %>-<% contract.end_year %></td>
+    		<td><%= contract.start_year %>-<%= contract.end_year %></td>
 	  	</tr>
 		<% end %>
 	  <tr>

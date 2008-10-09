@@ -22,11 +22,11 @@
 	  </tr>
 		<% for contract in @player.contracts %>
 	  	<tr>
-    		<td>
+    		<td align="center">
 				<img height="100" src="<%=h contract.club.crest_url %>" /><br/>
 				<%= link_to contract.club.name, contract.club %>
 			</td>
-    		<td><%= contract.start_year %>-<% contract.end_year %></td>
+    		<td><%= contract.start_year %>-<%= contract.end_year %></td>
 	  	</tr>
 		<% end %>
 	  <tr>

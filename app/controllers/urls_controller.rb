@@ -4,7 +4,8 @@ class UrlsController < ApplicationController
   # GET /urls
   # GET /urls.xml
   def index
-    @urls = Url.find(:all)
+    #@urls = Url.find(:all)
+    @urls = Url.paginate :per_page => 150, :page => params[:page], :order => 'id DESC'
 
     respond_to do |format|
       format.html # index.html.erb

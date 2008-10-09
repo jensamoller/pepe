@@ -5,7 +5,7 @@ class CreateClubs < ActiveRecord::Migration
       t.string :full_name, :string
       t.date :founded
       t.string :country
-      t.integer :url_id, :null => false, :unique => true
+      # t.integer :url_id, :null => false, :unique => true
       t.string :chairman
       t.string :manager
       t.string :stadium

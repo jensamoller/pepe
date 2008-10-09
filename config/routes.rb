@@ -11,6 +11,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :foos
 
+  map.connect "/players/search", :controller => "players", :action => "search"
+  
   map.resources :players
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -10,13 +10,30 @@ class ClubParser < Parser
         club.name = club.full_name
       end
       club.crest_url = find_club_crest(infobox_table)
-      club.url = url
-      club.save
+      
+      club_url = ClubUrl.new
+      club_url.url = url
+      #club.url = url
+      
+      saved_club = Club.find_by_full_name(club.full_name)
+      
+      if((saved_club.nil?) or (saved_club.name!=club.name or saved_club.founded!=club.founded))
+        club.save
+        club_url.club = club
+      else
+        club_url.club = saved_club
+      end
+      
+      club_url.save
+
       puts club.to_s
       url.depth = 1
     else
       url.depth = 2
     end
+
+    puts "parsed club: #{club}"
+
   end
 
   def parse_club_infobox(infobox_table)
@@ -24,7 +41,7 @@ class ClubParser < Parser
 
     infobox_table.search("/tr").each do |tr|
 
-      if(tr.at("/th/a[@title='Football club names']"))
+      if(tr.at("/th/span/a[@title='Football club names']"))
         club.full_name = parse_club_full_name(tr.search("td"))
         club.name = club.full_name
       elsif(tr.at("/th/a[@title='Stadium']"))

@@ -66,11 +66,7 @@ class PlayerParser < Parser
 
       if(!first_cell)
         first_header_cell = tr.at("/th")
-        #puts "first_header_cell: #{first_header_cell}"
-
       else
-        #puts "first_cell: #{first_cell}"
-
         strong_tag = first_cell.at("/b")
         if(strong_tag)
           tmp_string = strong_tag.inner_html
@@ -191,22 +187,21 @@ class PlayerParser < Parser
     links.each do |link|
       url_string = link.attributes['href']
 
-      club_url
-      
-      current_urls = Url.find_by_sql("SELECT * FROM urls WHERE url='#{url_string}' LIMIT 1")
-      if(current_urls.length!=0)
-        club_url = current_urls[0]
-      else
-        club_url = (Url.new :url => url_string, :depth => 3).save
+      db_url = Url.find_by_url(url_string)
+
+      if(db_url.nil?)
+        db_url = (Url.new :url => url_string, :depth => 3)
+        db_url.save
       end
 
-      if(club_url.visited.nil?)
-        Parser.new(club_url)
+      if(db_url.visited.nil?)
+        Parser.new(db_url)
       end
-    
-      clubs = Club.find_by_sql("SELECT * FROM clubs WHERE url_id=#{club_url.id} LIMIT 1")
-      if(clubs.length>0)
-        club_info_array[c] = clubs[0]
+
+      club_url = ClubUrl.find_by_url_id(db_url.id)
+      if(club_url)
+        club = Club.find_by_id(club_url.club.id)
+        club_info_array[c] = club
         c += 1
       end
     end
@@ -337,8 +332,23 @@ class PlayerParser < Parser
     end
   end
 
+  def remove_text_tags(main_tag)
+
+    manipulating_tags = ["i", "b", "em"]
+
+    manipulating_tags.each do |tag|
+      
+      manipulating_tag = main_tag.at(tag)
+
+      if(manipulating_tag)
+        manipulating_tag.swap(manipulating_tag.inner_html)
+      end
+    end
+  end
+
   def find_player_name(infobox_table)
     name_cell = infobox_table.search("/tr/td[@class='fn']")
+    remove_text_tags(name_cell)
     return name_cell.inner_html
   end
 

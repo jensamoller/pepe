@@ -14,13 +14,13 @@
 
 <% for club in @clubs %>
   <tr>
-    <td><img src="<%=h club.crest_url %>" /></td>
+    <td align="center"><img src="<%=h club.crest_url %>" /></td>
     <td><%= link_to club.name, club %></td>
     <td><%=h club.full_name %></td>
     <td><%=h club.country %></td>
     <td><%=h club.founded %></td>
     <td><%=h club.contracts.length %></td>
-	<td><a target="_blank" href="http://en.wikipedia.org<%= club.url.url %> " ><%=h club.url.url %></a></td>
+	<td><a target="_blank" href="http://en.wikipedia.org<%= club.urls[0].url %> " ><%=h club.urls[0].url %></a></td>
     <td><%= link_to 'Edit', edit_club_path(club) %></td>
     <td><%= link_to 'Destroy', club, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>

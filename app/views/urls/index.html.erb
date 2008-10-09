@@ -1,14 +1,15 @@
 <h1>Listing urls</h1>
-
+<%= link_to 'Clubs', clubs_path %>
+<%= link_to 'Players', players_path %>
+<%= will_paginate @urls %>
 <table>
   <tr>
   </tr>
 
 <% for url in @urls %>
   <tr>
-    <td><%= link_to 'Show', url %></td>
-    <td><%= link_to 'Edit', edit_url_path(url) %></td>
-    <td><%= link_to 'Destroy', url, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= url.url %></td>
+    <td><%= url.visited %></td>
   </tr>
 <% end %>
 </table>

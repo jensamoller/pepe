@@ -9,7 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080831095459) do
+ActiveRecord::Schema.define(:version => 20081005195419) do
+
+  create_table "club_urls", :force => true do |t|
+    t.integer  "url_id",     :limit => 11, :null => false
+    t.integer  "club_id",    :limit => 11, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "clubs", :force => true do |t|
     t.string   "name"
@@ -17,7 +24,6 @@ ActiveRecord::Schema.define(:version => 20080831095459) do
     t.string   "string"
     t.date     "founded"
     t.string   "country"
-    t.integer  "url_id",     :limit => 11, :null => false
     t.string   "chairman"
     t.string   "manager"
     t.string   "stadium"
