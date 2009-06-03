@@ -1,14 +1,30 @@
 class PlayersController < ApplicationController
 
   def search
-    @player = Player.find :first
+    
+    phrase = params[:phrase]
+    
+    puts "phrase: #{phrase}"
+    
+    @phrase = phrase
+    
+    sql = "SELECT * FROM players WHERE name LIKE '%#{phrase}%'"
+    
+    puts "sql: #{sql}"
+    
+    @players = Player.find(:all, :conditions => ['name LIKE ?', "%#{params[:phrase]}%"])
+    
+    if(@players.length==1)
+      redirect_to(@players[0])
+    end
+    
   end
 
 
   # GET /players
   # GET /players.xml
   def index
-    #@players = Player.find(:all)
+    
     @players = Player.paginate :per_page => 25, :page => params[:page], :order => 'id DESC'
 
     respond_to do |format|
@@ -21,7 +37,7 @@ class PlayersController < ApplicationController
   # GET /players/1.xml
   def show
     @player = Player.find(params[:id])
-
+    @player.contracts.sort_by { |contract| contract.start_year }
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @player }

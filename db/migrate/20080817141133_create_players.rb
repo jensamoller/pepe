@@ -10,6 +10,7 @@ class CreatePlayers < ActiveRecord::Migration
       t.string  :birth_country
       t.string  :birth_city
       t.string  :image_url
+      t.text   :wikipedia_info
       t.timestamps
     end
   end

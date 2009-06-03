@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title><%= yield(:title) || "colorfootball" %></title>
+  <%= stylesheet_link_tag 'colorfootball' %>
+</head>
+<body>
+	<div id="page-wrap">
+		<img src="/images/header-logo.png" alt="logo" />
+		<ul id="navigation">
+			<li class="bio"><a href="/">bio</a></li>
+			<li class="players"><a href="/players">players</a></li>
+			<li class="clubs"><a href="/clubs">clubs</a></li>
+			<li class="managers"><a href="/clubs">managers</a></li>
+		</ul>
+		<div id="main-content">
+			<%= yield(:title)%>
+			<p style="color: green"><%= flash[:notice] %></p>
+			<%= yield  %>
+		</div>
+		<div id="footer">
+    		&copy; colorfootball 2009
+    	</div>
+
+		<div style="clear: both;"></div>
+	</div>
+
+</body>
+</html>

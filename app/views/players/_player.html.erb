@@ -1,0 +1,23 @@
+<tr>
+	<td>
+		<% if player.image_url %>
+		<div class="content_image">
+			<span></span>
+			<%= image_tag player.image_url %>
+		</div>
+		<% end %>
+	</td>
+	<td><%=h player.given_name %></td>
+	<td><%= link_to player.name, player %></td>
+	<td>
+		<ul>
+			<%= render :partial => 'contracts/club_contract', :collection => player.contracts%>
+		</ul>
+	</td>
+	<td><%=h player.birthday %></td>
+	<td><%=h player.height %></td>
+	<td><%=h player.jersey_number %></td>
+	<td><%=h player.birth_country %></td>
+	<td><%=h player.birth_city %></td>
+	<td><a target="_blank" href="http://en.wikipedia.org<%= player.url.url %> " ><%=h player.url.url %></a></td>
+</tr>

@@ -1,0 +1,133 @@
+div {
+}
+
+h1 {
+	font-size: 48px;
+	font-weight: normal;
+	font-variant: small-caps;
+}
+
+h2 {
+	font-size: 36px;
+	font-weight: normal;
+	font-variant: small-caps;
+}
+
+h3 {
+	font-size: 24px;
+}
+
+h4 {
+	font-size: 21px;
+}
+
+h5 {
+	font-size: 18px;
+}
+
+h6 {
+	font-size: 16px;
+}
+
+p {
+	font-size: 14px;
+}
+
+ul#menu {
+	float: left;
+	width: 100%;
+	color: #036;
+	background-color: #458;
+}
+
+ul#menu li { 
+	display: inline; 
+}
+
+ul#menu li a  {
+	width: 10em;
+	float: left;
+	color: #036;
+	background-color: #458;
+	text-decoration: none;
+	padding: 0.2em 1em;
+	border-right: 1px solid #fff;
+}
+
+ul#menu li a:hover
+{
+	background-color: #630;
+	color: #864;
+}
+
+.site_title {
+	font-weight: bold;
+	font-size: 36px;
+	color: #036;
+	vertical-align: middle;
+}
+
+.site_title_alt {
+	font-weight: normal;
+	color: #060;
+}
+
+
+#info {
+	margin: 30px;
+}  
+
+#contracts {
+	margin: 30px;
+}
+
+ul{
+	list-style-type: none;
+}
+   
+/* Page structures */  
+.content #info { width: 30%; }  
+.content #contracts { width: 50%; }
+
+
+
+
+.fullname {
+	font-weight: normal;
+	font-size: 16px;
+	font-style: oblique;
+	color: #666;
+}
+
+
+a.name_list {
+	font-size: 20px;
+	text-decoration: none;
+}
+
+
+/* Rounded-cornered divs -*/
+.roundedBox {
+	position:relative; 
+	padding:17px; 
+	margin:10px 0;
+	vertical-align: middle;
+}
+			
+	/*- All the corners -*/
+	.corner {
+		position:absolute; 
+		width:17px; 
+		height:17px;
+	}
+	
+		/*- Each corner -*/
+		.topLeft {top:0; left:0; background-position:-1px -1px;}
+		.topRight {top:0; right:0; background-position:-19px -1px;}
+		.bottomLeft {bottom:0; left:0; background-position:-1px -19px;}
+		.bottomRight {bottom:0; right:0; background-position:-19px -19px;}
+				
+		/*- Type1 - Blue -*/	
+		#type1 {background-color:#CCDEDE;}
+			#type1 .corner {background-image:url(../images/corners-type1.gif);}
+

@@ -1,0 +1,21 @@
+<% contract = club_contract %>
+
+<li>
+	<div class="roundedBox" id="type1">
+		<% if contract.club.crest_url %>
+		<%= image_tag contract.club.crest_url, :height => 50, :class => "club_image_list" %>&nbsp;
+		<% end %>
+		<%= link_to contract.club.name, contract.club, :class => "name_list" %>
+		&nbsp;
+		<%= contract.start_year %>-<%= contract.end_year %>
+		&nbsp;
+		<%= contract.apperances %>&nbsp;(<%= contract.goals %>)
+		<% if contract.contract_type==Contract::ContractTypes[:player_on_loan] %>
+		LOAN!
+		<% end %>
+		<div class="corner topLeft"></div>
+		<div class="corner topRight"></div>
+		<div class="corner bottomLeft"></div>
+		<div class="corner bottomRight"></div>
+	</div>
+</li>

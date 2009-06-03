@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/../config/boot'
+load File.join(RAILS_ROOT, 'config', 'environment.rb')
+
+#puts "start #{RAILS_ENV}"
+
+require 'rubygems'
+require 'open-uri'
+require 'hpricot'
+
+  url = Url.find_by_visited(nil)
+  
+  puts "url: #{url}"
+  
+  if(url.nil?)
+    url = (Url.new :url => "/wiki/Ruud_van_Nistelrooy", :depth => 1)
+    url.save
+  end
+  
+  puts "url.nil?: #{url.nil?}"
+  
+  until (url.nil?)
+    puts "parsing #{url.to_s}"
+    Parser.new(url)
+    url = nil #Url.find_by_visited(nil)
+  end
+
+  
+  
+  puts "All urls parsed"

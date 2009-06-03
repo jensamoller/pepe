@@ -1,13 +1,13 @@
 class PlayerParser < Parser
 
-  attr_reader :doc 
+  attr_reader :body_content_div 
   attr_reader :infobox_table
   attr_reader :url
 
-  def initialize(doc, infobox_table, url)
-    @doc = doc
+  def initialize(body_content_div, infobox_table, url)
+    @body_content_div = body_content_div
     @infobox_table = infobox_table
-    @url = url  
+    @url = url
   end
 
   def parse_player()
@@ -19,9 +19,11 @@ class PlayerParser < Parser
       player.image_url = find_player_image(@infobox_table)
 
       player.url = @url
+
+      player.wikipedia_info = get_wikipedia_info()
       url.depth = 1
       player.save
-
+            
       puts player.to_s
 
     else 
@@ -30,37 +32,12 @@ class PlayerParser < Parser
 
   end
 
-  def fix_player_name(player, infobox_table)
-    if(player.given_name.nil?)
-      # some player attributes must be set to know that it is a player-page 
-      # a few other page types also has infobox_table and therefore name
-      if(!(player.birthday.nil? and player.height.nil? and player.birth_country.nil?) )
-        player.given_name = player.name
-      end
-    end
-    
-    if(player.name.nil?)
-      player.name = player.given_name
-    end
-  end
-
-  def parse_player_place_of_birth(player, tr)
-    first_value = tr.search("td[2]/a[1]").inner_html
-    second_value = tr.search("td[2]/a[2]").inner_html
-
-    # if only one value is present, this is proberly the country
-    if(second_value.nil? or second_value=="")
-      player.birth_country = first_value
-    else
-      player.birth_city = first_value
-      player.birth_country = second_value
-    end
-  end
-
   def parse_player_infobox(infobox_table)
     player = Player.new()
-
-    infobox_table.search("/tr").each do |tr|
+    
+    table_rows = infobox_table.search("/tr")
+    
+    table_rows.each do |tr|
 
       first_cell = tr.at("/td")
 
@@ -77,7 +54,9 @@ class PlayerParser < Parser
         if(tmp_string=="")
           #puts "no tr/td/b: #{tr}"
         elsif (tmp_string == "Full name")
-          player.given_name = $coder.decode(tr.search("td[2]").inner_html)
+          
+          given_name_cell = tr.at("td[2]")
+          player.given_name = parse_given_name(given_name_cell)
         elsif (tmp_string == "Date of birth")
           player.birthday = tr.search("td[2]/span/span[@class=\"bday\"]").inner_html
         elsif (tmp_string == "Place of birth")
@@ -112,12 +91,48 @@ class PlayerParser < Parser
     return player 
 
   end
+  
+  def parse_given_name(given_name_cell)
+
+    remove_text_tags(given_name_cell) # eg. Mathias <i>Zanka</i> Jørgensen --> Mathias Zanka Jørgensen
+    delete_footnotes_tags(given_name_cell) # eg. <b>Jens Aage Møller<sup><a href="#anchor">1</a></sup></b>
+    remove_given_tags(given_name_cell, "a") # eg. <a href="/wiki/Order_of_the_British_Empire" title="Order of the British Empir(...)
+    swap_break_tags_for_whitespace(given_name_cell) 
+
+    return $coder.decode(given_name_cell.inner_html)
+  end
+
+  def fix_player_name(player, infobox_table)
+    if(player.given_name.nil?)
+      # some player attributes must be set to know that it is a player-page 
+      # a few other page types also has infobox_table and therefore name
+      if(!(player.birthday.nil? and player.height.nil? and player.birth_country.nil?) )
+        player.given_name = player.name
+      end
+    end
+    
+    if(player.name.nil?)
+      player.name = player.given_name
+    end
+  end
+
+  def parse_player_place_of_birth(player, tr)
+    first_value = tr.search("td[2]/a[1]").inner_html
+    second_value = tr.search("td[2]/a[2]").inner_html
+
+    # if only one value is present, this is proberly the country
+    if(second_value.nil? or second_value=="")
+      player.birth_country = first_value
+    else
+      player.birth_city = first_value
+      player.birth_country = second_value
+    end
+  end
+
 
   # parses string like
-  # 1998–2000
-  # <br/>
-  # 2000–2006
-  # <br/>
+  # 1998–2000<br/>
+  # 2000–2006<br/>
   # 2006–    
   # to two-dimensional integer Array [[1998, 2000], [2000, 2006], [2006, nil]]
   def parse_period_cell(period_info_array, period_string, number_of_clubs)
@@ -168,6 +183,13 @@ class PlayerParser < Parser
       period_array[0] = period_string[0, dash_index].to_i
       period_array[1] = period_string[dash_index+dash_char.length, period_string.length]
 
+      if(period_array[0]=="")
+        period_array[0] = nil
+      else
+        period_array[0] = period_array[0].to_i
+      end
+
+
       if(period_array[1]=="")
         period_array[1] = nil
       else
@@ -175,34 +197,73 @@ class PlayerParser < Parser
       end
     else
       period_array[0] = period_string.to_i
+      period_array[1] = period_string.to_i
     end
     
     return period_array
   
   end
   
-  def parse_club_cell(club_info_array, links)
+  
+  # parses string like
+  # <a title="Luton Town F.C." href="/wiki/Luton_Town_F.C.">Luton Town</a>
+  # <br/>
+  # →
+  # <a class="mw-redirect" title="Sunderland F.C." href="/wiki/Sunderland_F.C.">Sunderland</a>
+  # (loan)
+  # <br/>
+  # to two-dimensional Array [[#Club:Luton, Contract::ContractTypes[:player]], 
+  #   [#Club:Sunderland, Contract::ContractTypes[:player_on_loan]]]  
+  def parse_club_cell(club_info_array, clubs_cell)
     
+    #puts "clubs_cell: #{clubs_cell}"
+    
+
+    clubs_string = clubs_cell.inner_html
+
+    links = clubs_cell.search("/a")
     c = 0
     links.each do |link|
-      url_string = link.attributes['href']
+      
+      contract_type = Contract::ContractTypes[:player]
 
-      db_url = Url.find_by_url(url_string)
-
-      if(db_url.nil?)
-        db_url = (Url.new :url => url_string, :depth => 3)
-        db_url.save
+      # does the string start with an arrow then it is a loan contract
+      if(clubs_string[0, 3]=="→")
+        contract_type = Contract::ContractTypes[:player_on_loan]
       end
 
-      if(db_url.visited.nil?)
-        Parser.new(db_url)
+      # step through the actual lines to be able to follow the loan/not loan status
+      index = clubs_string.index("<br />")
+      if(index)
+        clubs_string = clubs_string[index+6, clubs_string.length].strip
       end
 
-      club_url = ClubUrl.find_by_url_id(db_url.id)
-      if(club_url)
-        club = Club.find_by_id(club_url.club.id)
-        club_info_array[c] = club
-        c += 1
+
+      if(is_valid_link(link))   
+
+        url_string = link.attributes['href']
+
+        # find url in db or add it as new
+        db_url = Url.find_by_url(url_string)
+        if(db_url.nil?)
+          db_url = (Url.new :url => url_string, :depth => 3)
+          db_url.save
+        end
+
+        # parse url to (hopefully) new club
+        if(db_url.visited.nil?)
+          Parser.new(db_url)
+        end
+
+        # find the url in club_url table
+        club_url = ClubUrl.find_by_url_id(db_url.id)
+        
+        # find the club in club table
+        if(club_url)
+          club = Club.find_by_id(club_url.club.id)
+          club_info_array[c] = [club, contract_type]
+          c += 1
+        end
       end
     end
   end
@@ -212,8 +273,8 @@ class PlayerParser < Parser
   def parse_single_stat(stats_string)
     
     stats_array = Array.new(2)
-    stats_array[0] = 0
-    stats_array[1] = 0
+    stats_array[0] = nil
+    stats_array[1] = nil
     start_parenthesis_index = stats_string.index("(")
 
     if(!start_parenthesis_index.nil?)
@@ -228,7 +289,7 @@ class PlayerParser < Parser
       end
        
       if(stats_array[1]=="")
-        stats_array[1] = 0
+        stats_array[1] = nil
       else
         stats_array[1] = stats_array[1].to_i
       end
@@ -247,14 +308,10 @@ class PlayerParser < Parser
 
     stats_string = stats_cell.inner_html
 
-    #puts "stats_string: #{stats_string}"
-
     c = 0
     while(c!=number_of_clubs)
 
       index = stats_string.index("<br />")
-      #puts "index: #{index}"
-
       if(index)
         tmp_stats_string = stats_string[0, index]
       
@@ -264,7 +321,7 @@ class PlayerParser < Parser
         stats_string = stats_string[index+6, stats_string.length].strip
       else
         if(stats_string=="")
-          stats_info_array[c] = [0, 0]
+          stats_info_array[c] = [nil, nil]
         else
           stats_info_array[c] = parse_single_stat(stats_string)
         end
@@ -279,6 +336,8 @@ class PlayerParser < Parser
  
     next_row = tr.next_sibling
 
+    #puts "next_row: #{next_row}"
+
     period_cell = next_row.at("/td[1]")
     clubs_cell = next_row.at("/td[2]")
     stats_cell = next_row.at("/td[3]")
@@ -288,7 +347,7 @@ class PlayerParser < Parser
     stats_info_array = Array.new
     
     if(clubs_cell)
-      parse_club_cell(club_info_array, clubs_cell.search("/a"))
+      parse_club_cell(club_info_array, clubs_cell)
     end
 
     if(period_cell)
@@ -299,20 +358,18 @@ class PlayerParser < Parser
       parse_stats_cell(stats_info_array, stats_cell, club_info_array.length)
     end
 
-    c = 0
-    club_info_array.each do |club| 
+    club_info_array.each_with_index do |club_array, c| 
     
       contract = Contract.new()
       contract.player = player
-      contract.club = club
-      contract.contract_type = Contract::ContractTypes[:player]
+      contract.club = club_array[0]
+      contract.contract_type = club_array[1]
       contract.start_year = period_info_array[c][0]
       contract.end_year = period_info_array[c][1]
       contract.apperances = stats_info_array[c][0]
       contract.goals = stats_info_array[c][1]
       
       player.contracts[player.contracts.length] = contract
-      c += 1
     end
     
     #player.clubs[player.clubs.length] = clubs[0]
@@ -332,23 +389,11 @@ class PlayerParser < Parser
     end
   end
 
-  def remove_text_tags(main_tag)
-
-    manipulating_tags = ["i", "b", "em"]
-
-    manipulating_tags.each do |tag|
-      
-      manipulating_tag = main_tag.at(tag)
-
-      if(manipulating_tag)
-        manipulating_tag.swap(manipulating_tag.inner_html)
-      end
-    end
-  end
-
   def find_player_name(infobox_table)
     name_cell = infobox_table.search("/tr/td[@class='fn']")
     remove_text_tags(name_cell)
+    delete_footnotes_tags(name_cell)
+    
     return name_cell.inner_html
   end
 

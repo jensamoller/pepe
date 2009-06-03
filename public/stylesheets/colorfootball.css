@@ -1,0 +1,80 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #A8AD80;
+}
+
+#page-wrap {
+	width: 1024px;
+	margin: 0 auto;
+}
+
+#main-content {
+	padding: 100px 150px 100px 150px;
+	background: url(../images/content-bg.png) repeat-y;
+}
+
+ul#navigation {
+	list-style:none;
+	
+	}
+	ul#navigation li {
+		display: inline;
+	}
+	ul#navigation li a {
+		height: 63px;
+		display: block;
+		float: left;
+		text-indent: -9999px;
+	}
+	ul#navigation li.bio a {
+		width: 226px;
+		background: url(../images/nav/nav-bio.png) bottom center ;
+	}
+	ul#navigation li.players a {
+		width: 194px;
+		background: url(../images/nav/nav-players.png) bottom center ;
+	}
+	ul#navigation li.clubs a {
+		width: 194px;
+		background: url(../images/nav/nav-clubs.png) bottom center ;
+	}
+	ul#navigation li.managers a {
+		width: 285px;
+		background: url(../images/nav/nav-managers.png) bottom center ;
+	}
+	ul#navigation li a:hover {
+		background-position: center center;
+	}
+	
+#footer {
+	min-height: 81px;
+	background: url(../images/footer-bg.png) no-repeat;
+}
+
+
+.content_image {
+	margin: 30px;
+	position: relative;
+	float: left;
+}
+
+.content_image img {
+	background: #fff;
+	border: solid 1px #ccc;
+	padding: 4px;
+}
+
+
+.content_image span {
+	width: 77px;
+	height: 57px;
+	display: block;
+	position: absolute;
+	top: -20px;
+	left: -15px;
+	background: url(../images/tape_turned.png) no-repeat;
+}

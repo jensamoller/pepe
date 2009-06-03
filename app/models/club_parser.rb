@@ -1,23 +1,38 @@
 class ClubParser < Parser
 
-  def initialize(doc, infobox_table, url)
+
+  attr_reader :body_content_div 
+  attr_reader :infobox_table
+  attr_reader :url
+
+  def initialize(body_content_div, infobox_table, url)
+    #puts "init club parser"
+    @body_content_div = body_content_div
+    @infobox_table = infobox_table
+    @url = url   
+  end
+
+
+  def parse_club()
     
     club = parse_club_infobox(infobox_table)
-
-    if(club.full_name)
+            
+    if(!club.full_name.nil? and club.full_name!="")
       club.name = find_club_name(infobox_table)
       if(club.name.nil? or club.name=="")
         club.name = club.full_name
       end
+      
       club.crest_url = find_club_crest(infobox_table)
       
       club_url = ClubUrl.new
       club_url.url = url
-      #club.url = url
       
+      # check if club is already stored
       saved_club = Club.find_by_full_name(club.full_name)
       
-      if((saved_club.nil?) or (saved_club.name!=club.name or saved_club.founded!=club.founded))
+      if((saved_club.nil?) or (saved_club.name!=club.name or saved_club.year_founded!=club.year_founded))
+        club.wikipedia_info = get_wikipedia_info()
         club.save
         club_url.club = club
       else
@@ -26,7 +41,7 @@ class ClubParser < Parser
       
       club_url.save
 
-      puts club.to_s
+      #puts club.to_s
       url.depth = 1
     else
       url.depth = 2
@@ -41,7 +56,7 @@ class ClubParser < Parser
 
     infobox_table.search("/tr").each do |tr|
 
-      if(tr.at("/th/span/a[@title='Football club names']"))
+      if(tr.at("/th/a[@title='Football club names']"))
         club.full_name = parse_club_full_name(tr.search("td"))
         club.name = club.full_name
       elsif(tr.at("/th/a[@title='Stadium']"))
@@ -56,10 +71,9 @@ class ClubParser < Parser
       else
         th = tr.at("/th")
         if(th)
-
           th_name = th.inner_html;
           if(th_name=="Founded")
-            parse_foundation_date(tr.at("td"))
+            parse_foundation_date(tr.at("td"), club)
           elsif(th_name=="Short name")
             club.name = tr.at("td").inner_html
           elsif(th_name=="Chairman")
@@ -79,23 +93,32 @@ class ClubParser < Parser
       #puts "tr: #{tr.inner_html}"
     end
     
+    puts "parse_club_infobox: #{club}"
+    
     return club
 
   end
 
-  def parse_foundation_date(table_cell)
-    links = table_cell.search("a")
-
-    puts "links.length: #{links.length}"
-
-    if(links.length>=2)
-      puts "0: #{links[0].inner_html}"
-      puts "1: #{links[1].inner_html}"
-    elsif (links.length==1)
-      puts "0: #{links[0].inner_html}"
-    else
-      puts "-: #{table_cell.inner_html}"
+  
+  def parse_foundation_date(table_cell, club)
+    
+    #puts "table_cell.inner_text: #{table_cell.inner_text}"
+    founded_words = table_cell.inner_text.split
+    founded_words.each do |word|
+      if(is_year(word))
+        club.year_founded = word.to_i
+        break
+      end
     end
+  end
+
+  def is_year(supposed_year_string)
+    begin
+      return (supposed_year_string.to_i>=1700 and supposed_year_string.to_i<2100)
+    rescue Exception
+      return false
+    end
+  
   end
 
 =begin    
@@ -143,21 +166,12 @@ class ClubParser < Parser
   end
 
   def parse_club_full_name(club_name_cell)
-
-    break_tag = club_name_cell.search("br")
-    if(break_tag)
-      break_tag.remove
-    end
-
-    span_tag = club_name_cell.search("span")
-    if(span_tag)
-      span_tag.remove
-    end
-
-    sup_tag = club_name_cell.search("sup")
-    if(sup_tag)
-      sup_tag.remove
-    end
+    
+    swap_break_tags_for_whitespace(club_name_cell)
+    delete_footnotes_tags(club_name_cell)    
+    remove_given_tags(club_name_cell, "span")
+    remove_text_tags(club_name_cell)
+    remove_given_tags(club_name_cell, "a")
 
     return $coder.decode(club_name_cell.inner_html)
   end

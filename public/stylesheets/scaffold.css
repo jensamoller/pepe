@@ -1,10 +1,51 @@
-body { background-color: #fff; color: #333; }
+* {
+	margin:0;
+	padding:0;
+}
+
+
+body { 
+	background-color: #EBEBEB; 
+	background-image: url(../images/top-blue-bg_smaller.png);
+	background-repeat: repeat-x;
+	background-attachment: scroll;
+	background-position: left top;
+}
 
 body, p, ol, ul, td {
-  font-family: verdana, arial, helvetica, sans-serif;
-  font-size:   13px;
-  line-height: 18px;
+  	font-family: Georgia,serif,verdana, arial, helvetica, sans-serif;
+  	font-size:   13px;
+  	line-height: 18px;
+
 }
+
+
+.header {
+	text-align: center;
+	vertical-align: middle;
+
+	padding: .5em;
+	
+}
+
+.container {
+	background-color: transparent; 
+	background-image: url(../images/header-shadow.gif);
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: 0 207px;
+	
+	width: 80%;
+	margin: 10px auto;	
+}
+
+#footer
+{
+clear: both;
+margin: 0;
+padding: .5em;
+}
+
 
 pre {
   background-color: #eee;

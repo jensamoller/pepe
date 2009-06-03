@@ -7,11 +7,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :clubs
 
-  map.resources :players
-
-  map.resources :foos
-
-  map.connect "/players/search", :controller => "players", :action => "search"
+  map.connect 'players/search/:phrase', :controller => 'players', :action => 'search'
   
   map.resources :players
 

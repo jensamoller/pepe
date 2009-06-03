@@ -23,9 +23,11 @@ require 'hpricot'
   until (@urls.length == 0)
     
     url = @urls[0]
+    url.visited = Time.now
+    url.save
+    
     Parser.new(url)
 
-    #@urls = {}
     @urls = Url.find_by_sql "SELECT * FROM urls WHERE visited is NULL LIMIT 1"
   end
   puts "All urls parsed"

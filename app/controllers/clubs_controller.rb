@@ -3,8 +3,6 @@ class ClubsController < ApplicationController
   # GET /clubs.xml
   def index
     
-    #@clubs = Club.find(:all)
-
     @clubs = Club.paginate :per_page => 25, :page => params[:page], :order => 'id DESC'
 
     respond_to do |format|
@@ -17,6 +15,11 @@ class ClubsController < ApplicationController
   # GET /clubs/1.xml
   def show
     @club = Club.find(params[:id])
+    
+    
+    #puts "1: #{@club.contracts}"
+    #@club.contracts => @club.contracts.sort_by { |contract| contract.start_year }
+    #puts "3: #{@club.contracts}"
 
     respond_to do |format|
       format.html # show.html.erb

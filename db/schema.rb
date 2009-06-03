@@ -9,11 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081005195419) do
+ActiveRecord::Schema.define(:version => 20081017144536) do
 
   create_table "club_urls", :force => true do |t|
-    t.integer  "url_id",     :limit => 11, :null => false
-    t.integer  "club_id",    :limit => 11, :null => false
+    t.integer  "url_id",     :null => false
+    t.integer  "club_id",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(:version => 20081005195419) do
   create_table "clubs", :force => true do |t|
     t.string   "name"
     t.string   "full_name"
-    t.string   "string"
-    t.date     "founded"
+    t.integer  "year_founded"
+    t.string   "date_founded"
     t.string   "country"
     t.string   "chairman"
     t.string   "manager"
@@ -30,24 +30,19 @@ ActiveRecord::Schema.define(:version => 20081005195419) do
     t.string   "league"
     t.string   "nickname"
     t.string   "crest_url"
+    t.text     "wikipedia_info"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "contracts", :force => true do |t|
-    t.integer  "player_id",     :limit => 11, :null => false
-    t.integer  "club_id",       :limit => 11, :null => false
-    t.integer  "start_year",    :limit => 11
-    t.integer  "end_year",      :limit => 11
-    t.string   "contract_type",               :null => false
-    t.integer  "apperances",    :limit => 11
-    t.integer  "goals",         :limit => 11
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "foos", :force => true do |t|
-    t.string   "name"
+    t.integer  "player_id",     :null => false
+    t.integer  "club_id",       :null => false
+    t.integer  "start_year"
+    t.integer  "end_year"
+    t.string   "contract_type", :null => false
+    t.integer  "apperances"
+    t.integer  "goals"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -55,21 +50,29 @@ ActiveRecord::Schema.define(:version => 20081005195419) do
   create_table "players", :force => true do |t|
     t.string   "given_name"
     t.string   "name"
-    t.date     "birthday",                    :default => '1975-10-30'
-    t.integer  "height",        :limit => 11, :default => 0
-    t.integer  "jersey_number", :limit => 11, :default => 0
-    t.integer  "url_id",        :limit => 11,                           :null => false
+    t.date     "birthday",       :default => '1975-10-30'
+    t.integer  "height",         :default => 0
+    t.integer  "jersey_number",  :default => 0
+    t.integer  "url_id",                                   :null => false
     t.string   "birth_country"
     t.string   "birth_city"
     t.string   "image_url"
+    t.text     "wikipedia_info"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "unparsable_urls", :force => true do |t|
+    t.string   "url",        :null => false
+    t.datetime "visited"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "urls", :force => true do |t|
-    t.string   "url",                      :null => false
+    t.string   "url",        :null => false
     t.datetime "visited"
-    t.integer  "depth",      :limit => 11
+    t.integer  "depth"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

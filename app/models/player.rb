@@ -3,7 +3,7 @@ class Player < ActiveRecord::Base
   validates_presence_of :name, :birthday 
   validates_uniqueness_of :url_id
   
-  has_many :contracts
+  has_many :contracts, :order => 'start_year ASC'
   has_many :clubs, :through => :contracts
 
   belongs_to :url

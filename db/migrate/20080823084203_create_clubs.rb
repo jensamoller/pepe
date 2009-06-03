@@ -2,8 +2,9 @@ class CreateClubs < ActiveRecord::Migration
   def self.up
     create_table :clubs do |t|
       t.string :name
-      t.string :full_name, :string
-      t.date :founded
+      t.string :full_name
+      t.integer :year_founded
+      t.string :date_founded
       t.string :country
       # t.integer :url_id, :null => false, :unique => true
       t.string :chairman
@@ -12,6 +13,7 @@ class CreateClubs < ActiveRecord::Migration
       t.string :league
       t.string :nickname
       t.string :crest_url
+      t.text   :wikipedia_info
 
       t.timestamps
     end
