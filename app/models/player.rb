@@ -8,6 +8,16 @@ class Player < ActiveRecord::Base
 
   belongs_to :url
 
+  def get_birth_place
+    if(birth_country)
+      if(birth_city)
+        "in #{birth_city}, #{birth_country}"
+      else
+        "in #{birth_country}"
+      end
+    end
+  end
+
   def to_s
     if(given_name!=name)
       "Player: #{given_name} called #{name} born #{birthday}"

@@ -3,61 +3,175 @@
 	padding: 0;
 }
 
-body {
-	background-color: #A8AD80;
+div {
 }
 
+body {
+	background: url(../images/bg-gradient.png) repeat-x;
+	background-color: #cccccc;
+
+}
+
+body, p, ol, ul, td {
+  	font-family: Georgia,serif,verdana, arial, helvetica, sans-serif;
+  	font-size:   13px;
+  	line-height: 18px;
+}
+
+h2 {
+	font-size: 36px;
+	font-weight: normal;
+	font-variant: small-caps;
+}
+
+#header-top {
+	background-color: #003333;
+	height: 44px;
+	border-bottom: 8px solid #999;
+	font-family: Tahoma, Arial, "MS Trebuchet", sans-serif;
+	color: white;
+	padding-top: 20px;
+	padding-left: 120px;
+}
+
+#column-one {
+	float: left;
+	width: 525px;
+	background-color: #ffffff;
+
+}
+
+
+#column-two {
+	float: right;
+	width: 275px;
+	background-color: #ffffff;
+	
+}
+
+div.clear { clear: both; }
+
 #page-wrap {
-	width: 1024px;
+	width: 981px;
 	margin: 0 auto;
 }
 
-#main-content {
-	padding: 100px 150px 100px 150px;
-	background: url(../images/content-bg.png) repeat-y;
+div#main-content {
+	padding: 80px 60px 60px 80px;
+	background: url(../images/content-bg.png) bottom center ;
 }
+
+div#main-content a {
+	padding:1px 5px 1px 5px;
+	text-decoration: none;
+}
+
+
+div#main-content .player {
+	background-color:#669933;
+	border:1px solid #669933;
+	color:#ffffff;
+}
+
+div#main-content .club {
+	background-color:#0066cc;
+	border:1px solid #0066cc;
+	color:#ffffff;
+}
+
+ul#cloud { 
+	line-height: 2.8em; 
+	text-align: center;
+	list-style-type: none;
+}
+#cloud li { 
+	display: inline; 
+}
+#cloud a.tag1 { font-size: 0.8em; font-weight: 200; }
+#cloud a.tag2 { font-size: 1.0em; font-weight: 400; }
+#cloud a.tag3 { font-size: 1.2em; font-weight: 500; }
+#cloud a.tag4 { font-size: 1.4em; font-weight: 600; }
+#cloud a.tag5 { font-size: 1.6em; font-weight: 700; }
+#cloud a.tag6 { font-size: 1.8em; font-weight: 800; }
+#cloud a.tag7 { font-size: 2.0em; font-weight: 900; }
+#cloud a.tag8 { font-size: 2.2em; font-weight: 900; }
+
+
+
+ul.club_list_minimal {
+	line-height: 1.8em; 
+	list-style: none;
+}
+
+ul.club_list_minimal li {
+	display: inline; 
+}
+
 
 ul#navigation {
 	list-style:none;
+	padding-left: 160px;
+	padding-top: 50px;
 	
 	}
 	ul#navigation li {
 		display: inline;
 	}
 	ul#navigation li a {
-		height: 63px;
+		height: 65px;
 		display: block;
 		float: left;
 		text-indent: -9999px;
 	}
 	ul#navigation li.bio a {
-		width: 226px;
+		width: 103px;
 		background: url(../images/nav/nav-bio.png) bottom center ;
 	}
 	ul#navigation li.players a {
-		width: 194px;
+		width: 112px;
 		background: url(../images/nav/nav-players.png) bottom center ;
 	}
-	ul#navigation li.clubs a {
-		width: 194px;
-		background: url(../images/nav/nav-clubs.png) bottom center ;
-	}
 	ul#navigation li.managers a {
-		width: 285px;
+		width: 111px;
 		background: url(../images/nav/nav-managers.png) bottom center ;
+	}
+	ul#navigation li.pictures a {
+		width: 116px;
+		background: url(../images/nav/nav-pictures.png) top center ;
+	}
+	ul#navigation li.clips a {
+		width: 112px;
+		background: url(../images/nav/nav-clips.png) bottom center ;
+	}
+	ul#navigation li.wikipedia a {
+		width: 108px;
+		background: url(../images/nav/nav-wikipedia.png) bottom center ;
 	}
 	ul#navigation li a:hover {
 		background-position: center center;
 	}
 	
 #footer {
-	min-height: 81px;
-	background: url(../images/footer-bg.png) no-repeat;
+	background-color: #003333;
+	height: 44px;
+	border-top: 8px solid #999;
+	font-family: Tahoma, Arial, "MS Trebuchet", sans-serif;
+	color: white;
+	margin-top: 30px;
+	padding-top: 20px;
+	padding-left: 120px;
 }
 
+#info {
+	margin-right: 2px;
+	margin-left: 10px;
+	position: relative;
+	float: right;
+}
 
 .content_image {
-	margin: 30px;
+	margin-right: 2px;
+	margin-left: 10px;
 	position: relative;
 	float: left;
 }
@@ -78,3 +192,4 @@ ul#navigation {
 	left: -15px;
 	background: url(../images/tape_turned.png) no-repeat;
 }
+

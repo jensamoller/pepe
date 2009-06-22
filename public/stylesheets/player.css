@@ -105,15 +105,14 @@ a.name_list {
 	text-decoration: none;
 }
 
-
 /* Rounded-cornered divs -*/
 .roundedBox {
 	position:relative; 
 	padding:17px; 
-	margin:10px 0;
+	margin:5px 0;
 	vertical-align: middle;
 }
-			
+
 	/*- All the corners -*/
 	.corner {
 		position:absolute; 
@@ -130,4 +129,5 @@ a.name_list {
 		/*- Type1 - Blue -*/	
 		#type1 {background-color:#CCDEDE;}
 			#type1 .corner {background-image:url(../images/corners-type1.gif);}
+
 

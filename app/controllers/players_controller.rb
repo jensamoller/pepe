@@ -1,23 +1,17 @@
 class PlayersController < ApplicationController
 
+  def wikipedia
+  
+    puts "wikipedia in player controller"
+  end
+  
+
   def search
-    
-    phrase = params[:phrase]
-    
-    puts "phrase: #{phrase}"
-    
-    @phrase = phrase
-    
-    sql = "SELECT * FROM players WHERE name LIKE '%#{phrase}%'"
-    
-    puts "sql: #{sql}"
-    
-    @players = Player.find(:all, :conditions => ['name LIKE ?', "%#{params[:phrase]}%"])
-    
-    if(@players.length==1)
-      redirect_to(@players[0])
+    @players = Player.find(:all)
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @clubs }
     end
-    
   end
 
 

@@ -1,15 +1,8 @@
 <h1>Listing clubs</h1>
-<%= link_to 'Players', players_path %>
 <%= will_paginate @clubs %>
 <table border="1">
 	<tr>
 		<th>Crest</th>
-		<th>Name</th>
-		<th>Full name</th>
-		<th>Country</th>
-		<th>Founded year</th>
-		<th>Founded date</th>
-		<th>Contracts</th>
 		<th>Url</th>
 	</tr>
 	<%= render :partial => 'club', :collection => @clubs %>

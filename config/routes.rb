@@ -1,16 +1,11 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :urls
-
   map.resources :contracts
-
   map.resources :contracts
-
   map.resources :clubs
-
-  map.connect 'players/search/:phrase', :controller => 'players', :action => 'search'
-  
   map.resources :players
-
+  map.search "search", :controller => "search"
+  
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
