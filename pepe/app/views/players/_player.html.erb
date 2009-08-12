@@ -1,0 +1,18 @@
+
+<%= link_to player.name, player, :class => "player" %>
+<%=
+if (player.given_name != player.name )
+	"born <div id='given_name'>" + player.given_name + "</div>"
+end
+if (player.birthday)
+	"on <div id='birthday'>" + player.birthday.to_s + "</div>"
+end
+%>
+<%= player.get_birth_place %>
+Height: <%= player.height %>
+Jersey: <%=h player.jersey_number %>
+<a target="_blank" href="http://en.wikipedia.org<%= player.url.url %> " ><%=h player.url.url %></a>
+
+<ul class="club_list_minimal">
+	<%= render :partial => 'contracts/club_contract_no_crest', :collection => player.contracts%>
+</ul>

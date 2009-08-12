@@ -1,0 +1,12 @@
+<h1>Listing clubs</h1>
+<%= will_paginate @clubs %>
+<table border="1">
+	<tr>
+		<th>Crest</th>
+		<th>Url</th>
+	</tr>
+	<%= render :partial => 'club', :collection => @clubs %>
+</table>
+<%= will_paginate @clubs %>
+<br />
+<%= link_to 'New club', new_club_path %>

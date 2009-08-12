@@ -1,0 +1,6 @@
+<h1>Listing players</h1>
+<%= will_paginate @players %>
+<%= render :partial => 'minimal_player', :collection => @players %>
+<br />
+<%= will_paginate @players %>
+<%= link_to 'Clubs', clubs_path %>

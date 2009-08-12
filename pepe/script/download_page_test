@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/../config/boot'
+load File.join(RAILS_ROOT, 'config', 'environment.rb')
+
+#puts "start #{RAILS_ENV}"
+
+require 'rubygems'
+require 'open-uri'
+require 'net/http'
+
+
+  url = "en.wikipedia.org"
+  adress = "/wiki/AZ_Alkmaar"
+  port = 80
+
+  h = Net::HTTP.new(url, port)
+  puts h.class
+  resp = h.get(adress, nil )
+
+  puts "resp: #{resp.class}"
+  puts "Code = #{resp.code}"
+  puts "Message = #{resp.message}"
+  resp.each {|key, val| printf "%-14s = %-40.40s\n", key, val }
+  p data[0..555]
+
+
+  # open-uri RDoc: http://stdlib.rubyonrails.org/libdoc/open-uri/rdoc/index.html
+  #files = open(url)
+  #puts files.class

@@ -1,0 +1,22 @@
+<h1>Editing player</h1>
+
+<% form_for(@player) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :birthday %><br />
+    <%= f.date_select :birthday, :start_year=>1900, :end_year=>2000 %>.
+  </p>
+
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @player %> |
+<%= link_to 'Back', players_path %>

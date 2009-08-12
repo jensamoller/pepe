@@ -1,0 +1,17 @@
+<% contract = club_contract %>
+
+<li>
+	<div class="<%=contract.contract_type%>">
+		<% if contract.club.crest_url %>
+		<%= image_tag contract.club.crest_url, :height => 50, :class => "club_image_list" %>&nbsp;
+		<% end %>
+		<%= link_to contract.club.name, contract.club, :class => "club" %>
+		&nbsp;
+		<%= contract.start_year %>-<%= contract.end_year %>
+		&nbsp;
+		<%= contract.apperances %>&nbsp;(<%= contract.goals %>)
+		<% if contract.contract_type==Contract::ContractTypes[:player_on_loan] %>
+		LOAN!
+		<% end %>
+	</div>
+</li>

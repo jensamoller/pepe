@@ -1,0 +1,19 @@
+<h1>Editing contract</h1>
+<% form_for(@contract) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :player_id %><br />
+    <%= f.text_field :player_id %>
+  </p>
+  <p>
+    <%= f.label :club_id %><br />
+    <%= f.text_field :club_id %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @contract %> |
+<%= link_to 'Back', contracts_path %>

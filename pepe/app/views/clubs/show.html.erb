@@ -1,0 +1,38 @@
+<% title "Club profile: #{@club.name}" %>
+
+<% if @club.crest_url %>
+<div class="content_image">
+	<%= image_tag @club.crest_url %>
+</div>
+<% end %>
+<div id="info">
+	<h2><%=h @club.name %></h2>
+	<h3 class="fullname"><%=h @club.full_name %></h3>
+	<table border="1">
+		<tr>
+			<td>Country</td>
+			<td><%=h @club.country %></td>
+		</tr>
+		<tr>
+			<td>Founded</td>
+			<td><%=h @club.year_founded %></td>
+		</tr>
+		<tr>
+			<td>Url</td>
+			<td>
+				<% for url in @club.urls %>
+				<a target="_blank" href="http://en.wikipedia.org<%= url.url %> " ><%=h url.url %></a><br/>
+				<% end %>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<p>
+<!-- 	<%=@club.wikipedia_info%> -->
+</p>
+<div id="contracts">
+	<ul>
+		<%= render :partial => 'contracts/player_contract', :collection => @club.contracts %>
+	</ul>
+</div>

@@ -1,0 +1,13 @@
+<tr>
+	<td>
+		<% if club.crest_url %>
+			<%= image_tag club.crest_url %>
+		<% end %>
+	<br/>
+	<%= link_to club.name, club %> as <%= club.full_name %> in <%=club.year_founded %> <%= club.contracts.length %> contracts</td>
+	<td>
+		<% for url in club.urls %>
+		<a target="_blank" href="http://en.wikipedia.org<%= url.url %> " ><%= url.url %></a><br/>
+		<% end %>
+	</td>
+</tr>

@@ -1,0 +1,8 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+GIF:
+  id: 1
+  name: "Grenaa IF"
+  full_name: "Grenaa IF"
+  country: "Denmark"
+  founded: 2008-08-23

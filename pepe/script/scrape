@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/../config/boot'
+load File.join(RAILS_ROOT, 'config', 'environment.rb')
+
+#puts "start #{RAILS_ENV}"
+
+require 'rubygems'
+require 'open-uri'
+require 'hpricot'
+
+
+  @urls = Url.find_by_sql("SELECT * FROM urls WHERE visited is NULL LIMIT 1")
+  
+  if(@urls.length==0)
+    #start_url = "/wiki/Portal:Association_football"
+    start_url = "/wiki/Martin_Albrechtsen"
+
+    tmpUrl = (Url.new :url => start_url, :depth => 1).save
+  end
+  
+  @urls = Url.find_by_sql("SELECT * FROM urls WHERE visited is NULL LIMIT 1")
+  
+  until (@urls.length == 0)
+    
+    url = @urls[0]
+    url.visited = Time.now
+    url.save
+    
+    Parser.new(url)
+
+    @urls = Url.find_by_sql "SELECT * FROM urls WHERE visited is NULL LIMIT 1"
+  end
+  puts "All urls parsed"

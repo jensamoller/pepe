@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+fake_player_url:
+   id: 1
+   url: "/wiki/fake"
+   visited: "NULL"
+   depth: 2
+
+fake_club_url:
+    id: 2
+    url: "/wiki/fak2"
+    visited: "NULL"
+    depth: 2
