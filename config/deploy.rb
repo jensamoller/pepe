@@ -1,32 +1,86 @@
-set :application, "set your application name here"
-set :repository,  "set your repository location here"
+# This is a sample Capistrano config file for EC2 on Rails.
+# It should be edited and customized.
 
-# If you have previously been relying upon the code to start, stop 
-# and restart your mongrel application, or if you rely on the database
-# migration code, please uncomment the lines you require below
+set :application, "colorfootball"
 
-# If you are deploying a rails app you probably need these:
+set :scm, :git
+set :repository, "git://github.com/jensamoller/pepe.git"
 
-# load 'ext/rails-database-migrations.rb'
-# load 'ext/rails-shared-directories.rb'
+# NOTE: for some reason Capistrano requires you to have both the public and
+# the private key in the same folder, the public key should have the 
+# extension ".pub".
+ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/Skagen.pem"]
 
-# There are also new utility libaries shipped with the core these 
-# include the following, please see individual files for more
-# documentation, or run `cap -vT` with the following lines commented
-# out to see what they make available.
+# Your EC2 instances. Use the ec2-xxx....amazonaws.com hostname, not
+# any other name (in case you have your own DNS alias) or it won't
+# be able to resolve to the internal IP address.
+role :web,      "ec2-79-125-39-198.eu-west-1.compute.amazonaws.com"
+role :app,      "ec2-79-125-39-198.eu-west-1.compute.amazonaws.com"
+role :db,       "ec2-79-125-39-198.eu-west-1.compute.amazonaws.com", :primary => true
+role :memcache, "ec2-79-125-39-198.eu-west-1.compute.amazonaws.com"
 
-# load 'ext/spinner.rb'              # Designed for use with script/spin
-# load 'ext/passenger-mod-rails.rb'  # Restart task for use with mod_rails
-# load 'ext/web-disable-enable.rb'   # Gives you web:disable and web:enable
+# Whatever you set here will be taken set as the default RAILS_ENV value
+# on the server. Your app and your hourly/daily/weekly/monthly scripts
+# will run with RAILS_ENV set to this value.
+set :rails_env, "production"
 
-# If you aren't deploying to /u/apps/#{application} on the target
-# servers (which is the default), you can specify the actual location
-# via the :deploy_to variable:
-# set :deploy_to, "/var/www/#{application}"
-
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
-# set :scm, :subversion
-# see a full list by running "gem contents capistrano | grep 'scm/'"
-
-role :web, "your web-server here"
+# EC2 on Rails config. 
+# NOTE: Some of these should be omitted if not needed.
+set :ec2onrails_config, {
+  # S3 bucket and "subdir" used by the ec2onrails:db:restore task
+  :restore_from_bucket => "your-bucket",
+  :restore_from_bucket_subdir => "database",
+  
+  # S3 bucket and "subdir" used by the ec2onrails:db:archive task
+  # This does not affect the automatic backup of your MySQL db to S3, it's
+  # just for manually archiving a db snapshot to a different bucket if 
+  # desired.
+  :archive_to_bucket => "your-other-bucket",
+  :archive_to_bucket_subdir => "db-archive/#{Time.new.strftime('%Y-%m-%d--%H-%M-%S')}",
+  
+  # Set a root password for MySQL. Run "cap ec2onrails:db:set_root_password"
+  # to enable this. This is optional, and after doing this the
+  # ec2onrails:db:drop task won't work, but be aware that MySQL accepts 
+  # connections on the public network interface (you should block the MySQL
+  # port with the firewall anyway). 
+  # If you don't care about setting the mysql root password then remove this.
+  :mysql_root_password => "",
+  
+  # Any extra Ubuntu packages to install if desired
+  # If you don't want to install extra packages then remove this.
+  :packages => ["logwatch", "imagemagick"],
+  
+  # Any extra RubyGems to install if desired: can be "gemname" or if a 
+  # particular version is desired "gemname -v 1.0.1"
+  # If you don't want to install extra rubygems then remove this
+  :rubygems => ["rmagick", "rfacebook -v 0.9.7", "mislav-will_paginate -v 2.3.11"],
+  
+  # Set the server timezone. run "cap -e ec2onrails:server:set_timezone" for 
+  # details
+  :timezone => "Canada/Eastern",
+  
+  # Files to deploy to the server (they'll be owned by root). It's intended
+  # mainly for customized config files for new packages installed via the 
+  # ec2onrails:server:install_packages task. Subdirectories and files inside
+  # here will be placed in the same structure relative to the root of the
+  # server's filesystem. 
+  # If you don't need to deploy customized config files to the server then
+  # remove this.
+  :server_config_files_root => "../server_config",
+  
+  # If config files are deployed, some services might need to be restarted.
+  # If you don't need to deploy customized config files to the server then
+  # remove this.
+  :services_to_restart => %w(apache2 postfix sysklogd),
+  
+  # Set an email address to forward admin mail messages to. If you don't
+  # want to receive mail from the server (e.g. monit alert messages) then
+  # remove this.
+  :admin_mail_forward_address => "jensamoller@gmail.com",
+  
+  # Set this if you want SSL to be enabled on the web server. The SSL cert 
+  # and key files need to exist on the server, The cert file should be in
+  # /etc/ssl/certs/default.pem and the key file should be in
+  # /etc/ssl/private/default.key (see :server_config_files_root).
+  :enable_ssl => true
+}
